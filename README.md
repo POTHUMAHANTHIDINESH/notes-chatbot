@@ -1,138 +1,113 @@
-📚 Notes Chatbot — RAG over your own PDFs, 100% free
+# 📚 Notes Chatbot — AI-Powered RAG Assistant
 
-Ask questions about your own lecture notes / textbook PDFs and get answers
-<<<<<<< HEAD
-grounded in *your* material, with citations back to the exact file and page.
-=======
-grounded in your material, with citations back to the exact file and page.
->>>>>>> 73f8ebb5fd8bfbfdc0946bffeafbd740ee53af2d
-Built for exam prep.
+A Retrieval-Augmented Generation (RAG) based AI assistant that allows users to upload PDF documents and ask context-aware questions with grounded, citation-backed answers.
 
-Stack (every piece is free, no credit card anywhere):
+Designed for students, researchers, and exam preparation.
 
-<<<<<<< HEAD
-| Piece | Tool |
-|---|---|
-| PDF parsing | `pypdf` |
-| Embeddings | `sentence-transformers` (runs locally, no API) |
-| Vector search | `FAISS` (local file, no hosted database) |
-| Answer generation | [Groq API](https://console.groq.com) free tier (Llama 3.3 70B) |
-| UI | Streamlit |
-| Hosting | Streamlit Community Cloud |
+---
 
-## Setup
+# 🚀 Features
 
-1. **Get a free Groq API key** — sign up at [console.groq.com/keys](https://console.groq.com/keys) (no credit card).
+- Upload multiple PDF documents
+- Ask questions in natural language
+- Retrieve relevant context from documents
+- Generate accurate answers using LLM
+- Provide page-level citations
+- Streamlit-based UI
 
-2. **Install and run:**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/notes-chatbot.git
-=======
-PieceToolPDF parsingpypdfEmbeddingssentence-transformers (runs locally, no API)Vector searchFAISS (local file, no hosted database)Answer generationGroq API free tier (Llama 3.3 70B)UIStreamlitHostingStreamlit Community Cloud
+---
 
-Setup
+# 🧠 Architecture
 
+User Query
+↓
+Embedding (Sentence Transformers)
+↓
+Vector Search (FAISS)
+↓
+Top-K Chunks Retrieved
+↓
+LLM (Groq / Llama 3)
+↓
+Final Answer + Citations
 
-Get a free Groq API key — sign up at console.groq.com/keys (no credit card).
-Install and run:
+---
 
+# 🛠️ Tech Stack
 
-bash   git clone https://github.com/YOUR_USERNAME/notes-chatbot.git
->>>>>>> 73f8ebb5fd8bfbfdc0946bffeafbd740ee53af2d
-   cd notes-chatbot
-   python -m venv venv
-   venv\Scripts\activate        # Mac/Linux: source venv/bin/activate
-   pip install -r requirements.txt
-   streamlit run app.py
-<<<<<<< HEAD
-   ```
+- PyPDF
+- SentenceTransformers
+- FAISS
+- Groq API (LLaMA 3)
+- Streamlit
+- Python
 
-3. Paste your Groq key into the sidebar (or set it once with
-   `setx GROQ_API_KEY "your_key"` on Windows / `export GROQ_API_KEY=your_key`
-   on Mac/Linux, so you never have to re-enter it).
+---
 
-4. Upload your PDFs → **Build / rebuild index** → ask questions in the chat box.
+# ⚙️ Workflow
 
-## How it works
+1. PDFs are parsed page by page
+2. Text is split into chunks
+3. Embeddings are generated
+4. Stored in FAISS index
+5. Query is embedded
+6. Similar chunks retrieved
+7. LLM generates grounded response
 
-1. **Ingest** — each PDF is read page by page (`pypdf`) so every chunk keeps its source filename and page number.
-2. **Chunk** — page text is split into ~900-character overlapping windows.
-3. **Embed** — each chunk becomes a vector locally via `all-MiniLM-L6-v2` (no API call, no cost).
-4. **Index** — vectors go into a local `FAISS` index, cached in `vectorstore/`.
-5. **Retrieve** — your question is embedded the same way; the top 5 most similar chunks are pulled out.
-6. **Generate** — those chunks + your question go to Groq's free Llama 3.3 70B model, instructed to answer only from the given context and cite file + page.
+---
 
-## Evaluating retrieval & answer quality
-
-`eval.py` measures two things separately:
-- **Retrieval accuracy** — did the correct file/page show up in the top-3 retrieved chunks?
-- **Answer accuracy** — does the final answer contain the expected key facts?
-
-Edit `TEST_CASES` in `eval.py` with real questions about your own notes, then:
-```bash
-python eval.py
-```
-```
-=======
-
-
-Paste your Groq key into the sidebar (or set it once with
-setx GROQ_API_KEY "your_key" on Windows / export GROQ_API_KEY=your_key
-on Mac/Linux, so you never have to re-enter it).
-Upload your PDFs → Build / rebuild index → ask questions in the chat box.
-
-
-How it works
-
-
-Ingest — each PDF is read page by page (pypdf) so every chunk keeps its source filename and page number.
-Chunk — page text is split into ~900-character overlapping windows.
-Embed — each chunk becomes a vector locally via all-MiniLM-L6-v2 (no API call, no cost).
-Index — vectors go into a local FAISS index, cached in vectorstore/.
-Retrieve — your question is embedded the same way; the top 5 most similar chunks are pulled out.
-Generate — those chunks + your question go to Groq's free Llama 3.3 70B model, instructed to answer only from the given context and cite file + page.
-
-
-Evaluating retrieval & answer quality
-
-eval.py measures two things separately:
-
-
-Retrieval accuracy — did the correct file/page show up in the top-3 retrieved chunks?
-Answer accuracy — does the final answer contain the expected key facts?
-
-
-Edit TEST_CASES in eval.py with real questions about your own notes, then:
-
-bashpython eval.py
-
->>>>>>> 73f8ebb5fd8bfbfdc0946bffeafbd740ee53af2d
-Retrieval accuracy: 8/10 (80%)
-Answer accuracy:    7/10 (70%)
-
-<<<<<<< HEAD
-## Deploy for free
-
-Push to GitHub → [share.streamlit.io](https://share.streamlit.io) → sign in with GitHub → **New app** → pick this repo, branch `main`, file `app.py` → add `GROQ_API_KEY` under **Secrets** (optional) → **Deploy**.
-
-## Project structure
-=======
-Deploy for free
-
-Push to GitHub → share.streamlit.io → sign in with GitHub → New app → pick this repo, branch main, file app.py → add GROQ_API_KEY under Secrets (optional) → Deploy.
-
-Project structure
->>>>>>> 73f8ebb5fd8bfbfdc0946bffeafbd740ee53af2d
+# 📂 Project Structure
 
 notes-chatbot/
-├── app.py           # Streamlit UI
-├── rag_engine.py     # ingestion, embedding, retrieval, generation
-├── eval.py            # retrieval + answer accuracy evaluation
+├── app.py
+├── rag_engine.py
+├── eval.py
 ├── requirements.txt
 ├── .gitignore
-├── .env.example
 └── README.md
-<<<<<<< HEAD
-```
-=======
->>>>>>> 73f8ebb5fd8bfbfdc0946bffeafbd740ee53af2d
+
+---
+
+# 🚀 Setup
+
+git clone https://github.com/YOUR_USERNAME/notes-chatbot.git
+cd notes-chatbot
+
+python -m venv venv
+source venv/bin/activate
+
+pip install -r requirements.txt
+streamlit run app.py
+
+---
+
+# 🔑 API Setup
+
+Get key: https://console.groq.com/keys
+
+Windows:
+setx GROQ_API_KEY "your_key"
+
+Mac/Linux:
+export GROQ_API_KEY=your_key
+
+---
+
+# 📊 Evaluation
+
+Run:
+python eval.py
+
+---
+
+# 💡 Highlights
+
+- End-to-end RAG system
+- Local embeddings
+- Grounded answers with citations
+- Lightweight and deployable
+
+---
+
+# 👨‍💻 Author
+Dinesh
